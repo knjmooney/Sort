@@ -10,6 +10,11 @@ namespace SortTest {
 
 		}
 
+		constexpr TestType& operator=(const TestType& rhs) {
+			m_value = rhs.m_value;
+			return *this;
+		}
+
 		constexpr bool operator<(const TestType& rhs) const {
 			return m_value < rhs.m_value;
 		}
@@ -23,6 +28,6 @@ namespace SortTest {
 		}
 
 	private:
-		const int32_t m_value;
+		int32_t m_value;
 	};
 }

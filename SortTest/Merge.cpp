@@ -86,5 +86,105 @@ namespace SortTest
 				Assert::IsTrue(std::is_same<decltype(result), std::vector<TestType>>::value);
 			}
 		}
+
+		TEST_METHOD(Backwards)
+		{
+			// GIVEN: a reverse-sorted std::vector<int32_t>
+			// WHEN: it is sorted
+			// THEN: the return value is sorted
+			// THEN: the type of the return value is std::vector<int32_t>
+			{
+				auto result = mergeSort(std::vector<int32_t>{ 99, 76, 54, 12, 5, 4, 1});
+				Assert::IsTrue(result.size() == 7);
+				Assert::IsTrue(result == std::vector<int32_t>{1, 4, 5, 12, 54, 76, 99});
+				Assert::IsTrue(std::is_same<decltype(result), std::vector<int32_t>>::value);
+			}
+
+			// GIVEN: a reverse-sorted std::vector<TestType>
+			// WHEN: it is sorted
+			// THEN: the return value is sorted
+			// THEN: the type of the return value is std::vector<TestType>
+			{
+				auto result = mergeSort(std::vector<TestType>{ { 65 }, { 63 }, { 62 }, { 4 }, { 2 }});
+				Assert::IsTrue(result.size() == 5);
+				Assert::IsTrue(result == std::vector<TestType>{ { 2 }, { 4 }, { 62 }, { 63 }, { 65 }});
+				Assert::IsTrue(std::is_same<decltype(result), std::vector<TestType>>::value);
+			}
+		}
+
+		TEST_METHOD(Unsorted)
+		{
+			// GIVEN: an unsorted std::vector<int32_t>
+			// WHEN: it is sorted
+			// THEN: the return value is sorted
+			// THEN: the type of the return value is std::vector<int32_t>
+			{
+				auto result = mergeSort(std::vector<int32_t>{6, 912, 233, 97, -239234, 0 });
+				Assert::IsTrue(result.size() == 6);
+				Assert::IsTrue(result == std::vector<int32_t>{-239234, 0, 6, 97, 233, 912});
+				Assert::IsTrue(std::is_same<decltype(result), std::vector<int32_t>>::value);
+			}
+
+			// GIVEN: an unsorted std::vector<TestType>
+			// WHEN: it is sorted
+			// THEN: the return value is sorted
+			// THEN: the type of the return value is std::vector<TestType>
+			{
+				auto result = mergeSort(std::vector<TestType>{ { -1 }, { -1230 }, { 2 }, { 659 }});
+				Assert::IsTrue(result.size() == 4);
+				Assert::IsTrue(result == std::vector<TestType>{ { -1230 }, { -1 }, { 2 }, { 659 }});
+				Assert::IsTrue(std::is_same<decltype(result), std::vector<TestType>>::value);
+			}
+		}
+
+		TEST_METHOD(SomeDuplicate)
+		{
+			// GIVEN: an unsorted std::vector<int32_t> duplicated elements
+			// WHEN: it is sorted
+			// THEN: the return value is sorted
+			// THEN: the type of the return value is std::vector<int32_t>
+			{
+				auto result = mergeSort(std::vector<int32_t>{6, 912, 233, 6, 97, 0, -239234, 0 });
+				Assert::IsTrue(result.size() == 8);
+				Assert::IsTrue(result == std::vector<int32_t>{-239234, 0, 0, 6, 6, 97, 233, 912});
+				Assert::IsTrue(std::is_same<decltype(result), std::vector<int32_t>>::value);
+			}
+
+			// GIVEN: an unsorted std::vector<TestType> with duplicated elements
+			// WHEN: it is sorted
+			// THEN: the return value is sorted
+			// THEN: the type of the return value is std::vector<TestType>
+			{
+				auto result = mergeSort(std::vector<TestType>{ { -1 }, { 659 }, { 2 }, { -1230 }, { 2 }, { 659 }});
+				Assert::IsTrue(result.size() == 6);
+				Assert::IsTrue(result == std::vector<TestType>{ { -1230 }, { -1 }, { 2 }, { 2 }, { 659 }, { 659 }});
+				Assert::IsTrue(std::is_same<decltype(result), std::vector<TestType>>::value);
+			}
+		}
+
+		TEST_METHOD(AllDuplicate)
+		{
+			// GIVEN: an std::vector<int32_t> of all equal elements
+			// WHEN: it is sorted
+			// THEN: the return value is sorted
+			// THEN: the type of the return value is std::vector<int32_t>
+			{
+				auto result = mergeSort(std::vector<int32_t>{ 4, 4, 4, 4 });
+				Assert::IsTrue(result.size() == 4);
+				Assert::IsTrue(result == std::vector<int32_t>{4, 4, 4, 4});
+				Assert::IsTrue(std::is_same<decltype(result), std::vector<int32_t>>::value);
+			}
+
+			// GIVEN: an std::vector<TestType> of all equal elements
+			// WHEN: it is sorted
+			// THEN: the return value is sorted
+			// THEN: the type of the return value is std::vector<TestType>
+			{
+				auto result = mergeSort(std::vector<TestType>{ { -1 }, { -1 }, { -1 }});
+				Assert::IsTrue(result.size() == 3);
+				Assert::IsTrue(result == std::vector<TestType>{ { -1 }, { -1 }, { -1 }});
+				Assert::IsTrue(std::is_same<decltype(result), std::vector<TestType>>::value);
+			}
+		}
 	};
 }
