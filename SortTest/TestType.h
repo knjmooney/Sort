@@ -5,6 +5,11 @@
 namespace SortTest {
 	class TestType {
 	public:
+		constexpr TestType()
+		: m_value(0) {
+
+		}
+
 		constexpr TestType(int32_t value)
 		: m_value(value) {
 
