@@ -1,55 +1,51 @@
 #pragma once
 
-#include <algorithm>
+#include <cmath>
 
 namespace Sort {
 	namespace internal {
-		template <typename Container>
-		constexpr Container mergeSorted(Container a, Container b) {
-			Container result;
-			result.resize(a.size() + b.size());
+		template <typename T>
+		constexpr void mergeSorted(const T* const sourceA, const size_t sourceASize,
+			                       const T* const sourceB, const size_t sourceBSize,
+			                       T* const target) {
+			// can't write directly to target, as it might alias sourceA/sourceB
+			std::vector<T> result(sourceASize + sourceBSize);
 
 			size_t resultIndex = 0, aIndex = 0, bIndex = 0;
-			while (aIndex < a.size() && bIndex < b.size()) {
-				result[resultIndex++] = a[aIndex] < b[bIndex] ? a[aIndex++] : b[bIndex++];
+			while (aIndex < sourceASize && bIndex < sourceBSize) {
+				result[resultIndex++] = sourceA[aIndex] < sourceB[bIndex] ? sourceA[aIndex++] : sourceB[bIndex++];
 			}
 
-			while (aIndex < a.size()) {
-				result[resultIndex++] = a[aIndex++];
+			while (aIndex < sourceASize) {
+				result[resultIndex++] = sourceA[aIndex++];
 			}
 
-			while (bIndex < b.size()) {
-				result[resultIndex++] = b[bIndex++];
+			while (bIndex < sourceBSize) {
+				result[resultIndex++] = sourceB[bIndex++];
 			}
 
-			return result;
+			memcpy(target, result.data(), result.size() * sizeof(T));
 		}
 	}
 
 	template <typename Container>
-	constexpr Container mergeSort(Container input) {
+	constexpr Container mergeSort(Container data) {
 		using namespace internal;
 
-		if (input.size() < 2) {
-			return input;
+		if (data.size() < 2) {
+			return data;
 		}
 
-		Container result;
-		result.resize(input.size());
-
-		std::vector<Container> subContainers;
-
-		for (size_t i = 0; i < input.size(); ++i) {
-			subContainers.push_back({ input[i] });
-		}
-
-		while (subContainers.size() != 1) {
-			for (size_t i = 0; i < subContainers.size() - 1; ++i) {
-				subContainers.push_back(mergeSorted(subContainers[i], subContainers[i + 1]));
-				subContainers.erase(subContainers.begin() + i, subContainers.begin() + i + 2);
+		size_t stride = 1;
+		do {
+			for (size_t i = 0; i + stride < data.size(); i += stride * 2) {
+				mergeSorted(&data[i], stride,
+					        &data[i + stride], std::min(stride, data.size() - (i + stride)),
+					        &data[i]);
 			}
-		}
+			stride *= 2;
+		} while (stride < data.size());
 
-		return subContainers.front();
+		return data;
 	}
 }

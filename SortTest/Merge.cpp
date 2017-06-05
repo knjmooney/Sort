@@ -186,5 +186,32 @@ namespace SortTest
 				Assert::IsTrue(std::is_same<decltype(result), std::vector<TestType>>::value);
 			}
 		}
+
+		TEST_METHOD(ManyElements)
+		{
+			// GIVEN: a large std::vector<int32_t> of unsorted data
+			// WHEN: it is sorted
+			// THEN: the return value is sorted
+			// THEN: the type of the return value is std::vector<int32_t>
+			// THEN: the data is sorted sometime this decade
+			{
+				std::vector<int32_t> input;
+				constexpr size_t vectorSize = 1000000;
+				input.resize(vectorSize);
+
+				// it may not be random, but it's large and unsorted; that's what matters to me
+				for (size_t i = 0; i < vectorSize; ++i) {
+					input[i] = vectorSize / (i + 1) + i * (i * i % 10);
+				}
+
+				std::vector<int32_t> expected = input;
+				std::sort(expected.begin(), expected.end());
+
+				auto result = mergeSort(input);
+				Assert::IsTrue(result.size() == vectorSize);
+				Assert::IsTrue(result == expected);
+				Assert::IsTrue(std::is_same<decltype(result), std::vector<int32_t>>::value);
+			}
+		}
 	};
 }
