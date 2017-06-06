@@ -9,7 +9,9 @@ namespace Sort {
                                    const T* const sourceB, const size_t sourceBSize,
                                    T* const target) {
             // can't write directly to target, as it might alias sourceA/sourceB
-            std::vector<T> result(sourceASize + sourceBSize);
+            // also, this isn't thread safe
+            static std::vector<T> result(sourceASize + sourceBSize);
+            result.resize(sourceASize + sourceBSize);
 
             size_t resultIndex = 0, aIndex = 0, bIndex = 0;
             while (aIndex < sourceASize && bIndex < sourceBSize) {
