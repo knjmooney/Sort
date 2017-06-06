@@ -201,7 +201,7 @@ namespace SortTest
 
                 // it may not be random, but it's large and unsorted; that's what matters to me
                 for (size_t i = 0; i < vectorSize; ++i) {
-                    input[i] = vectorSize / (i + 1) + i * (i * i % 10);
+                    input[i] = static_cast<int32_t>(vectorSize / (i + 1) + i * (i * i % 10));
                 }
 
                 std::vector<int32_t> expected = input;
